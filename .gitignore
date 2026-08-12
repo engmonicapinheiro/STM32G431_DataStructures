@@ -1,0 +1,33 @@
+# --- PlatformIO ---
+.pio/
+.piolibdeps/
+lib/README
+test/README
+include/README
+
+# --- Compiled Artifacts ---
+*.o
+*.obj
+*.elf
+*.bin
+*.hex
+*.map
+*.lst
+*.lss
+*.sym
+*.su
+*.d
+
+# --- CLion / JetBrains ---
+.idea/
+cmake-build-*/
+.clang-format
+.clang-tidy
+
+# --- Windows / OS ---
+desktop.ini
+Desktop.ini
+.DS_Store
+Thumbs.db
+*.swp
+*~
