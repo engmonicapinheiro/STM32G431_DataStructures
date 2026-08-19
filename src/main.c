@@ -2,7 +2,7 @@
 #include <stdio.h>
 #include "fpu.h"
 #include "uart.h"
-
+#include "timebase.h"
 
 int main()
 {
@@ -10,11 +10,13 @@ int main()
     FpuEnable();
     /* initialise the UART */
     UartInit();
+    /* initialise timebase */
+    TimebaseInit();
 
     while (1)
     {
         printf("Hello from STM32G431...\n\r");
-        for (int i = 0; i < 9000; ++i){}
+        delay(1);
     }
 
 }
