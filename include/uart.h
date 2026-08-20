@@ -2,7 +2,7 @@
 #define __UART_H__
 
 #define UART_BAUDRATE_DEBUG  115200
-#define SYS_FREQUENCY (16000000)
+#define SYS_FREQUENCY (16000000U)
 #define APB1_CLOCK    (SYS_FREQUENCY)
 
 void UartInit(void);

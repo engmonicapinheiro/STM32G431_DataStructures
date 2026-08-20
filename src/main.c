@@ -4,7 +4,9 @@
 #include "uart.h"
 #include "timebase.h"
 #include "gpio.h"
+#include "adc.h"
 
+uint32_t sensorValue;
 
 int main()
 {
@@ -18,20 +20,18 @@ int main()
     LedInit();
     /* initialise the button */
     ButtonInit();
+    /* initialise the ADC */
+    AdcInit();
+    /* start conversion */
+    StartConversion();
 
 
     while (1)
     {
-        //printf("Hello from STM32G431xx...\n\r");
-       // delay(1);
-        if (GetButtonState())
-        {
-            LedOn();
-        }
-        else
-        {
-            LedOff();
-        }
+        printf("Hello from STM32G431xx...\n\r");
+        delay(1);
+        sensorValue = AdcRead();
+        printf("%lu\r\n", (unsigned long)sensorValue);
 
     }
 
