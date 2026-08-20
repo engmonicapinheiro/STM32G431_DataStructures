@@ -1,6 +1,5 @@
 #include "stm32g431xx.h"
 #include <stdio.h>
-#include <stdbool.h>
 #include "fpu.h"
 #include "uart.h"
 #include "timebase.h"
@@ -17,16 +16,23 @@ int main()
     TimebaseInit();
     /* initialise the LED */
     LedInit();
+    /* initialise the button */
+    ButtonInit();
 
 
     while (1)
     {
         //printf("Hello from STM32G431xx...\n\r");
        // delay(1);
-        LedOn();
-        delay(2);
-        LedOff();
-        delay(2);
+        if (GetButtonState())
+        {
+            LedOn();
+        }
+        else
+        {
+            LedOff();
+        }
+
     }
 
 }

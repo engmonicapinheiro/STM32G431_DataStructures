@@ -26,19 +26,17 @@ void ButtonInit(void)
 {
     /* enable clock access to PORTA */
     RCC->AHB2ENR |= RCC_AHB2ENR_GPIOAEN;
-    /* set PA1 as input */
-    GPIOB->MODER &= ~(GPIO_MODER_MODE1_0);
-    GPIOB->MODER &= ~(GPIO_MODER_MODE1_1);
+    /* set PA9 as input */
+    GPIOA->MODER &= ~(GPIO_MODER_MODE9_Msk);
 }
 
 bool GetButtonState(void)
 {
     /* check if button is pressed
      * button is active low */
-    if(GPIOA->IDR & GPIO_ODR_OD1)
+    if(GPIOA->IDR & GPIO_IDR_ID9)
     {
         return false;
     }
-
         return true;
 }
