@@ -4,6 +4,7 @@
 #include <stdint.h>
 
 #define ONE_SECOND_LOAD     16000000
+#define ONE_MSECOND_LOAD    16000
 #define TICK_FREQUENCY      1
 #define MAX_DELAY           0xFFFFFFFF
 

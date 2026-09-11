@@ -12,7 +12,8 @@ void TimebaseInit(void)
     /* disable global interrupts */
     __disable_irq();
     /* load the timer with number of clock cycles per second */
-    SysTick->LOAD = ONE_SECOND_LOAD - 1;
+   // SysTick->LOAD = ONE_SECOND_LOAD - 1;
+    SysTick->LOAD = ONE_MSECOND_LOAD - 1;
     /* clear the systick current value register */
     SysTick->VAL = 0;
     /* select internal clock source */
