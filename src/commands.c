@@ -1,9 +1,27 @@
 #include "commands.h"
+#include "stm32g431xx.h"
 #include <stdbool.h>
 #include <stdlib.h>
 #include <stdio.h>
 #include "gpio.h"
-#include "uart.h"
+#include "adc.h"
+#include "timebase.h"
+
+LinkedList_t commandQueue;
+uint8_t receivedData;
+
+//testing here
+void InitialiseCommandQueue(void)
+{
+    commandQueue.head = NULL;
+}
+
+void CallProcessCommands(void)
+{
+    ProcessCommands(&commandQueue);
+    delay(100);
+}
+
 
 /**
  * @brief Inserts a command at the tail of the linked list (command queue).
@@ -93,4 +111,39 @@ void ProcessCommands(LinkedList_t *list)
 void ProcessAdcCommand(Command_t *command)
 {
     printf("ADC value: %lu\n\r", command->data);
+}
+
+
+void USART2_IRQHandler(void)
+{
+    if (USART2->CR1 & USART_CR1_RXNEIE)
+    {
+        //check if data is received
+        receivedData = USART2->RDR;  //read received byte
+        Command_t command;  //create a new command struct
+
+        switch (receivedData)
+        {
+        case '1':
+            command.commandType = COMMAND_LED_ON;
+            command.data = 0;
+            InsertAtTail(&commandQueue, command);
+            break;
+
+        case '2':
+            command.commandType = COMMAND_LED_OFF;
+            command.data = 0;
+            InsertAtTail(&commandQueue, command);
+            break;
+
+        case '3':
+            command.commandType = COMMAND_READ_ADC;
+            command.data = AdcRead();
+            InsertAtTail(&commandQueue, command);
+            break;
+
+        default:
+            break;
+        }
+    }
 }

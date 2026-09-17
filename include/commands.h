@@ -36,10 +36,12 @@ typedef struct
     Node_t *head;
 } LinkedList_t;
 
+
+void InitialiseCommandQueue(void);
 bool InsertAtTail(LinkedList_t *list, Command_t command);
 bool RemoveAtHead(LinkedList_t *list, Command_t *command);
 void ProcessCommands(LinkedList_t *list);
 void ProcessAdcCommand(Command_t *command);
-
+void CallProcessCommands(void);
 
 #endif //COMMANDS_H
