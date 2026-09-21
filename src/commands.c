@@ -10,7 +10,6 @@
 LinkedList_t commandQueue;
 uint8_t receivedData;
 
-//testing here
 void InitialiseCommandQueue(void)
 {
     commandQueue.head = NULL;
@@ -113,37 +112,40 @@ void ProcessAdcCommand(Command_t *command)
     printf("ADC value: %lu\n\r", command->data);
 }
 
+/* commented to use the handler in eventManagement
+ * before integrating the code
+ */
 
-void USART2_IRQHandler(void)
-{
-    if (USART2->CR1 & USART_CR1_RXNEIE)
-    {
-        //check if data is received
-        receivedData = USART2->RDR;  //read received byte
-        Command_t command;  //create a new command struct
-
-        switch (receivedData)
-        {
-        case '1':
-            command.commandType = COMMAND_LED_ON;
-            command.data = 0;
-            InsertAtTail(&commandQueue, command);
-            break;
-
-        case '2':
-            command.commandType = COMMAND_LED_OFF;
-            command.data = 0;
-            InsertAtTail(&commandQueue, command);
-            break;
-
-        case '3':
-            command.commandType = COMMAND_READ_ADC;
-            command.data = AdcRead();
-            InsertAtTail(&commandQueue, command);
-            break;
-
-        default:
-            break;
-        }
-    }
-}
+// void USART2_IRQHandler(void)
+// {
+//     if (USART2->CR1 & USART_CR1_RXNEIE)
+//     {
+//         //check if data is received
+//         receivedData = USART2->RDR;  //read received byte
+//         Command_t command;  //create a new command struct
+//
+//         switch (receivedData)
+//         {
+//         case '1':
+//             command.commandType = COMMAND_LED_ON;
+//             command.data = 0;
+//             InsertAtTail(&commandQueue, command);
+//             break;
+//
+//         case '2':
+//             command.commandType = COMMAND_LED_OFF;
+//             command.data = 0;
+//             InsertAtTail(&commandQueue, command);
+//             break;
+//
+//         case '3':
+//             command.commandType = COMMAND_READ_ADC;
+//             command.data = AdcRead();
+//             InsertAtTail(&commandQueue, command);
+//             break;
+//
+//         default:
+//             break;
+//         }
+//     }
+// }
