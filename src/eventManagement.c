@@ -5,6 +5,10 @@
 #include "stm32g431xx.h"
 #include "rtc.h"
 
+uint8_t received_data = 0;
+static uint8_t commandBuffer[MAX_COMMAND_LEN];
+static uint8_t buffer_index = 0;
+
 static EventNode_t *eventListHead = NULL;
 
 void AddEvent(const char *description)
@@ -95,16 +99,6 @@ void RemoveEventByTimestamp(uint32_t timestamp)
 }
 
 
-void USART2_IRQHandler(void)
-{
-    if (USART2->CR1 & USART_CR1_RXNEIE) //check if data is received
-    {
-
-
-    }
-
-}
-
 void HandleUartCommand(const char *command)
 {
     if (strstr(command, "add_event") == command)
@@ -113,7 +107,7 @@ void HandleUartCommand(const char *command)
         sscanf(command, "add_event %s", description);
         AddEvent(description);
     }
-    else if (strcmp(command, "print_event") == 0)
+    else if (strstr(command, "print_event") == command)
     {
         PrintEventList();
     }
@@ -129,4 +123,29 @@ void HandleUartCommand(const char *command)
     }
 }
 
+/* example:
+ * add_event ButtonPressed*
+ */
 
+void USART2_IRQHandler(void)
+{
+    if (USART2->ISR & USART_ISR_RXNE)
+    {
+        received_data = (uint8_t)USART2->RDR; //reading RDR clears RXNE automatically
+
+        if(received_data == '*')   //command termination
+        {
+            commandBuffer[buffer_index] = '\0';  //null - terminate the string
+            //process the command
+            HandleUartCommand((const char *)commandBuffer);
+            buffer_index = 0;
+        }
+        else
+        {
+            if(buffer_index < MAX_COMMAND_LEN - 1)
+            {
+                commandBuffer[buffer_index++] = received_data;
+            }
+        }
+    }
+}

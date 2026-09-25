@@ -9,6 +9,7 @@
  */
 
 #define MAX_EVENT_DESC_LEN   32
+#define MAX_COMMAND_LEN      64
 
 typedef struct EventNode
 {
