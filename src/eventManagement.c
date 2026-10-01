@@ -6,8 +6,8 @@
 #include "rtc.h"
 
 uint8_t received_data = 0;
-static uint8_t commandBuffer[MAX_COMMAND_LEN];
-static uint8_t buffer_index = 0;
+//static uint8_t commandBuffer[MAX_COMMAND_LEN];
+//static uint8_t buffer_index = 0;
 
 static EventNode_t *eventListHead = NULL;
 
@@ -123,29 +123,29 @@ void HandleUartCommand(const char *command)
     }
 }
 
-/* example:
- * add_event ButtonPressed*
- */
-
-void USART2_IRQHandler(void)
-{
-    if (USART2->ISR & USART_ISR_RXNE)
-    {
-        received_data = (uint8_t)USART2->RDR; //reading RDR clears RXNE automatically
-
-        if(received_data == '*')   //command termination
-        {
-            commandBuffer[buffer_index] = '\0';  //null - terminate the string
-            //process the command
-            HandleUartCommand((const char *)commandBuffer);
-            buffer_index = 0;
-        }
-        else
-        {
-            if(buffer_index < MAX_COMMAND_LEN - 1)
-            {
-                commandBuffer[buffer_index++] = received_data;
-            }
-        }
-    }
-}
+// /* example:
+//  * add_event ButtonPressed*
+//  */
+//
+// void USART2_IRQHandler(void)
+// {
+//     if (USART2->ISR & USART_ISR_RXNE)
+//     {
+//         received_data = (uint8_t)USART2->RDR; //reading RDR clears RXNE automatically
+//
+//         if(received_data == '*')   //command termination
+//         {
+//             commandBuffer[buffer_index] = '\0';  //null - terminate the string
+//             //process the command
+//             HandleUartCommand((const char *)commandBuffer);
+//             buffer_index = 0;
+//         }
+//         else
+//         {
+//             if(buffer_index < MAX_COMMAND_LEN - 1)
+//             {
+//                 commandBuffer[buffer_index++] = received_data;
+//             }
+//         }
+//     }
+// }

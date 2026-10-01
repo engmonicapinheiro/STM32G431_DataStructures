@@ -3,6 +3,11 @@
 #include <stdint.h>
 #include "commands.h"
 
+/* variables for the ring buffer for the LinkedList menu */
+static volatile uint8_t RxBuffer[UART_RX_BUFFER_SIZE];
+static volatile uint8_t RxHead = 0;
+static volatile uint8_t RxTail = 0;
+
 static uint16_t ComputeUartBaudrate(uint32_t peripheralClk, uint32_t baudrate);
 static void UartSetBaudrate(uint32_t peripheralClk, uint32_t baudrate);
 static void UartWrite(int ch);
@@ -11,8 +16,6 @@ static void UartWrite(int ch);
  * PA2 -> TX
  * PA3 -> RX
  */
-
-
 void UartInit(void)
 {
     /* enable clock access to GPIOA */
@@ -24,7 +27,6 @@ void UartInit(void)
 
     /* set alternate function type to AF7 (USART2 TX) */
     GPIOA->AFR[0] |= (7U << GPIO_AFRL_AFSEL2_Pos);
-
 
     /* set the mode of PA3 to alternate function mode */
     GPIOA->MODER &= ~(GPIO_MODER_MODE3_0);
@@ -68,7 +70,6 @@ static void UartWrite(int ch)
     while (!(USART2->ISR & USART_ISR_TXE)) {}
     /* write to transmit data register */
     USART2->TDR = (ch & 0xFF);
-
 }
 
 int _write(int fd, char *ptr, int len)
@@ -80,4 +81,64 @@ int _write(int fd, char *ptr, int len)
     return len;
 }
 
+int UartReadCharNonBlocking(uint8_t *ch)
+{
+    /* no data available */
+    if (RxHead == RxTail)
+    {
+        return 0;
+    }
+
+    *ch = RxBuffer[RxTail];
+    RxTail = (RxTail + 1U) & (UART_RX_BUFFER_SIZE - 1U);
+    return 1;
+}
+
+uint8_t UartReadRingBuffer(void)
+{
+    uint8_t ch;
+    while (!UartReadCharNonBlocking(&ch)) {}
+    return ch;
+}
+
+int UartReadInt(void)
+{
+    uint8_t ch;
+    int value = 0;
+    int negative = 0;
+
+    ch = UartReadRingBuffer();
+
+    if (ch == '-')
+    {
+        negative = 1;
+        ch = UartReadRingBuffer();
+    }
+
+    while (ch >= '0' && ch <= '9')
+    {
+        value = (value * 10) + (ch - '0');
+        ch = UartReadRingBuffer();
+    }
+
+    return negative ? -value : value;
+}
+
+
+void USART2_IRQHandler(void)
+{
+    if (USART2->ISR & USART_ISR_RXNE)
+    {
+        /* reading RDR also clears RXNE */
+        uint8_t data = (uint8_t)(USART2->RDR & 0xFF);
+        uint8_t nextHead = (RxHead + 1U) & (UART_RX_BUFFER_SIZE - 1U);
+
+        /* only stores if the buffer is not full */
+        if(nextHead != RxTail)
+        {
+            RxBuffer[RxHead] = data;
+            RxHead = nextHead;
+        }
+    }
+}
 

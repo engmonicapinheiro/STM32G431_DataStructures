@@ -8,6 +8,7 @@
 #include "commands.h"
 #include "rtc.h"
 #include "eventManagement.h"
+#include "singlyLinkedList.h"
 
 int main()
 {
@@ -26,10 +27,14 @@ int main()
     /* start conversion */
     StartConversion();
 
+    int option = 0;
+
     printf("Hello again from STM32G431xx...\n\r");
 
     while (1)
     {
+        option = PrintLinkedListMenu();
+        LinkedListMenu(option);
 
     }
 }
