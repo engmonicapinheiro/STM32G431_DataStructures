@@ -127,6 +127,14 @@ int UartReadInt(void)
 
 void USART2_IRQHandler(void)
 {
+    /* RXNEIE also enables the overrun interrupt. ORE is NOT cleared by
+ * reading RDR, so if it is left set the IRQ re-enters forever and
+ * main() never runs again. Clear it explicitly. */
+    if (USART2->ISR & USART_ISR_ORE)
+    {
+        USART2->ICR = USART_ICR_ORECF;
+    }
+
     if (USART2->ISR & USART_ISR_RXNE)
     {
         /* reading RDR also clears RXNE */

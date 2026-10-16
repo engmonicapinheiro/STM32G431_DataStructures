@@ -10,6 +10,12 @@
 #include "eventManagement.h"
 #include "singlyLinkedList.h"
 
+#define VREF_PLUS_MV 3300U   /* Set to your actual VREF+ voltage. */
+
+bool buttonState;
+uint32_t sensorValue;
+float chipTemperature = 0.0f;
+
 int main()
 {
     /* enable the FPU */
@@ -22,10 +28,16 @@ int main()
     TimebaseInit();
     /* initialise the LED */
     LedInit();
+    /* initialise the button */
+    ButtonInit();
     /* initialise the ADC */
-     AdcInit();
+   //  AdcInit();
     /* start conversion */
-    StartConversion();
+    //StartConversion();
+
+    InternalTemperatureSensorInit();
+    /* start conversion */
+  //  StartConversion();
 
     int option = 0;
 
@@ -33,8 +45,24 @@ int main()
 
     while (1)
     {
-        option = PrintLinkedListMenu();
-        LinkedListMenu(option);
+        //keep this
+      //  option = PrintLinkedListMenu();
+      //  LinkedListMenu(option);
 
+        // buttonState = GetButtonState();
+        // printf("button = %d\r\n", buttonState);
+        // delay(500);
+        //
+        // sensorValue = AdcRead();
+        // printf("pot = %ld\r\n", sensorValue);
+        // delay(500);
+
+
+        if (ReadInternalTemperatureCelcius(VREF_PLUS_MV, &chipTemperature))
+        {
+            printf("temp = %f\r\n", chipTemperature);
+        }
+
+        delay(1000);
     }
 }

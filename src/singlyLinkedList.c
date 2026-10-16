@@ -158,26 +158,73 @@ void CreateSingleNodeInLinkedList(void)
     printf("\r\nList created successfully\r\n");
 }
 
+
 void CreateLinkedList(void)
 {
     int value;
-    printf("\r\nEnter a value for a node. Enter -1 to stop\r\n");
 
     while (1)
     {
+        printf("\r\nEnter a value for a node. Enter -1 to stop\r\n");
+
         value = UartReadInt();
         if (value == -1)
         {
             break;
         }
 
-        LinkedListInsertAtEnd(value);
-        printf("\r\nEnter a value for a node. Enter -1 to stop\r\n");
+        /* allocate memory for the new node */
+        node_t *newNode = (node_t *)malloc(sizeof(node_t));
+
+        /* if the free memory has exhausted, print an overflow message */
+        if (newNode == NULL)
+        {
+            printf("OVERFLOW: no free memory available.\n");
+            return;
+        }
+
+        newNode->value = value;
+        newNode->next = NULL;
+
+        if (head == NULL)
+        {
+            head = newNode;
+            continue;
+        }
+
+        node_t *current = head;
+
+        while (current->next != NULL)
+        {
+            current = current->next;
+        }
+        /* set the new node as the last one */
+        current->next = newNode;
     }
 
     printf("\r\nList created successfully\r\n");
-
 }
+
+
+// void CreateLinkedList(void)
+// {
+//     int value;
+//     printf("\r\nEnter a value for a node. Enter -1 to stop\r\n");
+//
+//     while (1)
+//     {
+//         value = UartReadInt();
+//         if (value == -1)
+//         {
+//             break;
+//         }
+//
+//         LinkedListInsertAtEnd(value);
+//         printf("\r\nEnter a value for a node. Enter -1 to stop\r\n");
+//     }
+//
+//     printf("\r\nList created successfully\r\n");
+// }
 
 void LinkedListDisplay(void)
 {
