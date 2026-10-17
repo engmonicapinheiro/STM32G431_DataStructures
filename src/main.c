@@ -9,6 +9,7 @@
 #include "rtc.h"
 #include "eventManagement.h"
 #include "singlyLinkedList.h"
+#include "doublyLinkedList.h"
 
 #define VREF_PLUS_MV 3300U   /* Set to your actual VREF+ voltage. */
 
@@ -39,9 +40,24 @@ int main()
     /* start conversion */
   //  StartConversion();
 
-    int option = 0;
+    //int option = 0;
 
+    doublyLinkedListNode_t *head = NULL;
+    DoublyLinkedListInsertAtStart(&head, 21);
+    DoublyLinkedListInsertAtStart(&head, 14);
+    DoublyLinkedListInsertAtStart(&head, 7);
+    DoublyLinkedListInsertAtEnd(&head, 28);
+    DoublyLinkedListInsertAtPosition(&head, 99, 1);
+    DoublyLinkedListInsertAtPosition(&head, 1, 1);
+
+    DoublyLinkedListDeleteFrontNode(&head);
+    DoublyLinkedListDeleteLastNode(&head);
+    DoublyLinkedListDeletePositionNode(&head, 2);
+
+
+    //printf("\r\n");
     printf("Hello again from STM32G431xx...\n\r");
+    DoublyLinkedListPrint(head);
 
     while (1)
     {
@@ -57,12 +73,14 @@ int main()
         // printf("pot = %ld\r\n", sensorValue);
         // delay(500);
 
+        /* task: insert 3 temperatures each time the button is pressed */
 
-        if (ReadInternalTemperatureCelcius(VREF_PLUS_MV, &chipTemperature))
-        {
-            printf("temp = %f\r\n", chipTemperature);
-        }
 
-        delay(1000);
+        // if (ReadInternalTemperatureCelcius(VREF_PLUS_MV, &chipTemperature))
+        // {
+        //     printf("temp = %f\r\n", chipTemperature);
+        // }
+        //
+        // delay(1000);
     }
 }
