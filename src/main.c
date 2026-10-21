@@ -10,8 +10,10 @@
 #include "eventManagement.h"
 #include "singlyLinkedList.h"
 #include "doublyLinkedList.h"
+#include "circularLinkedList.h"
 
-#define VREF_PLUS_MV 3300U   /* Set to your actual VREF+ voltage. */
+
+#define VREF_PLUS_MV 3300U
 
 bool buttonState;
 uint32_t sensorValue;
@@ -42,22 +44,30 @@ int main()
 
     //int option = 0;
 
-    doublyLinkedListNode_t *head = NULL;
-    DoublyLinkedListInsertAtStart(&head, 21);
-    DoublyLinkedListInsertAtStart(&head, 14);
-    DoublyLinkedListInsertAtStart(&head, 7);
-    DoublyLinkedListInsertAtEnd(&head, 28);
-    DoublyLinkedListInsertAtPosition(&head, 99, 1);
-    DoublyLinkedListInsertAtPosition(&head, 1, 1);
+    printf("Hello again from STM32G431xx...\n\r");
 
-    DoublyLinkedListDeleteFrontNode(&head);
-    DoublyLinkedListDeleteLastNode(&head);
-    DoublyLinkedListDeletePositionNode(&head, 2);
+    circularLinkedListNode_t *head = NULL;
+    CircularLinkedListInsertAtStart(&head, 7);
+    CircularLinkedListInsertAtStart(&head, 21);
+    CircularLinkedListInsertAtStart(&head, 28);
+    CircularLinkedListInsertAtStart(&head, 35);
+    CircularLinkedListInsertAtEnd(&head, 0);
+
+    CircularLinkedListPrint(head);
+    printf("The length of the list is %d\r\n", CircularLinkedListLength(head));
+
+    CircularLinkedListDeleteAtStart(&head);
+    CircularLinkedListPrint(head);
+    printf("The length of the list is %d\r\n", CircularLinkedListLength(head));
+
+    CircularLinkedListDeleteAtEnd(&head);
+    CircularLinkedListPrint(head);
+    printf("The length of the list is %d\r\n", CircularLinkedListLength(head));
+
 
 
     //printf("\r\n");
-    printf("Hello again from STM32G431xx...\n\r");
-    DoublyLinkedListPrint(head);
+
 
     while (1)
     {
