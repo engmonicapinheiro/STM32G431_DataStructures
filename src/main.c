@@ -11,7 +11,7 @@
 #include "singlyLinkedList.h"
 #include "doublyLinkedList.h"
 #include "circularLinkedList.h"
-
+#include "stack.h"
 
 #define VREF_PLUS_MV 3300U
 
@@ -44,30 +44,48 @@ int main()
 
     //int option = 0;
 
-    printf("Hello again from STM32G431xx...\n\r");
+    /* Test 1 */
+#ifdef TEST1
+    int capacity = 7;
+    stack_t *temperatureValues = StackCreate(capacity);
 
-    circularLinkedListNode_t *head = NULL;
-    CircularLinkedListInsertAtStart(&head, 7);
-    CircularLinkedListInsertAtStart(&head, 21);
-    CircularLinkedListInsertAtStart(&head, 28);
-    CircularLinkedListInsertAtStart(&head, 35);
-    CircularLinkedListInsertAtEnd(&head, 0);
+    for (int i = 0; i <= 2*capacity; ++i)
+    {
+        StackPush(temperatureValues, (i*5));
+    }
 
-    CircularLinkedListPrint(head);
-    printf("The length of the list is %d\r\n", CircularLinkedListLength(head));
+    printf("Top element is %d\r\n", StackPeek(temperatureValues));
+    printf("Stack size is %d\r\n", StackGetSize(temperatureValues));
+    printf("\r\n");
 
-    CircularLinkedListDeleteAtStart(&head);
-    CircularLinkedListPrint(head);
-    printf("The length of the list is %d\r\n", CircularLinkedListLength(head));
+    for (int i = 0; i <= 2*capacity; ++i)
+    {
+        printf("Stack popped element is %d\r\n", StackPop(temperatureValues));
+    }
 
-    CircularLinkedListDeleteAtEnd(&head);
-    CircularLinkedListPrint(head);
-    printf("The length of the list is %d\r\n", CircularLinkedListLength(head));
+    if (StackIsEmpty(temperatureValues))
+    {
+        printf("Stack is empty\r\n");
+    }
+    else
+    {
+        printf("Stack is not empty\r\n");
+    }
+#endif
 
+    /* Test 2 */
+    int capacity = 5;
+    stack_t *temperatureValues = StackCreate(capacity);
 
+    for (int i = 0; i <= capacity; ++i)
+    {
+        StackPush(temperatureValues, ReadInternalTemperatureCelcius(VREF_PLUS_MV, &chipTemperature));
+    }
+    printf("Top element is %d\r\n", StackPeek(temperatureValues));
+    printf("Stack size is %d\r\n", StackGetSize(temperatureValues));
+    printf("\r\n");
 
-    //printf("\r\n");
-
+   // printf("Hello again from STM32G431xx...\n\r");
 
     while (1)
     {

@@ -1,5 +1,5 @@
-#ifndef __CIRCULAR_LINKED_LIST_H
-#define __CIRCULAR_LINKED_LIST_H
+#ifndef __CIRCULAR_LINKED_LIST_H__
+#define __CIRCULAR_LINKED_LIST_H__
 
 struct circularLinkedListNode
 {
