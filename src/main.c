@@ -7,12 +7,15 @@
 #include "adc.h"
 #include "rtc.h"
 #include "stackLinkedList.h"
+#include "queue.h"
+
 
 #define VREF_PLUS_MV 3300U
 
 bool buttonState;
 uint32_t sensorValue;
 float chipTemperature = 0.0f;
+
 
 int main()
 {
@@ -39,15 +42,18 @@ int main()
 
     //int option = 0;
 
-    StackPush_llist(7);
-    StackPush_llist(14);
-    StackPush_llist(21);
+    queue_t *temperatureValues = QueueCreate(5);
+    QueueEnqueue(temperatureValues, 7);
+    QueueEnqueue(temperatureValues, 14);
+    QueueEnqueue(temperatureValues, 21);
+    QueueEnqueue(temperatureValues, 28);
 
-    printf("Stack content: \r\n");
-    PrintStack_llist();
+    printf("Queue size is %d\r\n", QueueGetSize(temperatureValues));
+    printf("Front element: %d\r\n", QueueGetFrontElement(temperatureValues));
+    printf("Dequeued element: %d\r\n", QueueDequeue(temperatureValues));
+    printf("Queue new size is %d\r\n", QueueGetSize(temperatureValues));
 
-    printf("The popped element is %d\r\n", StackPop_llist());
-    PrintStack_llist();
+
 
    // printf("Hello again from STM32G431xx...\n\r");
 
