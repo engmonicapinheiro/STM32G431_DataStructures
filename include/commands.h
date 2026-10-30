@@ -24,10 +24,10 @@ typedef struct
 } Command_t;
 
 /* struct to represent a node in the linked list */
-typedef struct Node
+typedef struct LinkedListNode
 {
     Command_t command;   //command to be performed
-    struct Node *next;   //pointer to the next node in the list
+    struct LinkedListNode *next;   //pointer to the next node in the list
 } Node_t;
 
 /* structure representing the linked list of commands */

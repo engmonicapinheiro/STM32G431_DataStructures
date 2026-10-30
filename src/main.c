@@ -5,13 +5,8 @@
 #include "timebase.h"
 #include "gpio.h"
 #include "adc.h"
-#include "commands.h"
 #include "rtc.h"
-#include "eventManagement.h"
-#include "singlyLinkedList.h"
-#include "doublyLinkedList.h"
-#include "circularLinkedList.h"
-#include "stack.h"
+#include "stackLinkedList.h"
 
 #define VREF_PLUS_MV 3300U
 
@@ -44,46 +39,15 @@ int main()
 
     //int option = 0;
 
-    /* Test 1 */
-#ifdef TEST1
-    int capacity = 7;
-    stack_t *temperatureValues = StackCreate(capacity);
+    StackPush_llist(7);
+    StackPush_llist(14);
+    StackPush_llist(21);
 
-    for (int i = 0; i <= 2*capacity; ++i)
-    {
-        StackPush(temperatureValues, (i*5));
-    }
+    printf("Stack content: \r\n");
+    PrintStack_llist();
 
-    printf("Top element is %d\r\n", StackPeek(temperatureValues));
-    printf("Stack size is %d\r\n", StackGetSize(temperatureValues));
-    printf("\r\n");
-
-    for (int i = 0; i <= 2*capacity; ++i)
-    {
-        printf("Stack popped element is %d\r\n", StackPop(temperatureValues));
-    }
-
-    if (StackIsEmpty(temperatureValues))
-    {
-        printf("Stack is empty\r\n");
-    }
-    else
-    {
-        printf("Stack is not empty\r\n");
-    }
-#endif
-
-    /* Test 2 */
-    int capacity = 5;
-    stack_t *temperatureValues = StackCreate(capacity);
-
-    for (int i = 0; i <= capacity; ++i)
-    {
-        StackPush(temperatureValues, ReadInternalTemperatureCelcius(VREF_PLUS_MV, &chipTemperature));
-    }
-    printf("Top element is %d\r\n", StackPeek(temperatureValues));
-    printf("Stack size is %d\r\n", StackGetSize(temperatureValues));
-    printf("\r\n");
+    printf("The popped element is %d\r\n", StackPop_llist());
+    PrintStack_llist();
 
    // printf("Hello again from STM32G431xx...\n\r");
 
