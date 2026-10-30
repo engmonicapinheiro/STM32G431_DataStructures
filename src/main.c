@@ -8,7 +8,7 @@
 #include "rtc.h"
 #include "stackLinkedList.h"
 #include "queue.h"
-
+#include "memoryPool.h"
 
 #define VREF_PLUS_MV 3300U
 
@@ -42,20 +42,20 @@ int main()
 
     //int option = 0;
 
-    queue_t *temperatureValues = QueueCreate(5);
-    QueueEnqueue(temperatureValues, 7);
-    QueueEnqueue(temperatureValues, 14);
-    QueueEnqueue(temperatureValues, 21);
-    QueueEnqueue(temperatureValues, 28);
-
-    printf("Queue size is %d\r\n", QueueGetSize(temperatureValues));
-    printf("Front element: %d\r\n", QueueGetFrontElement(temperatureValues));
-    printf("Dequeued element: %d\r\n", QueueDequeue(temperatureValues));
-    printf("Queue new size is %d\r\n", QueueGetSize(temperatureValues));
-
-
-
    // printf("Hello again from STM32G431xx...\n\r");
+    printf("System Init...\r\n");
+    MemoryPoolInit();
+
+    void *Block1ptr = MemoryPoolAllocate();
+    printf("Free blocks left: %lu\r\n", MemoryPoolGetFreeBlockCount());
+    void *Block2ptr = MemoryPoolAllocate();
+    printf("Free blocks left: %lu\r\n", MemoryPoolGetFreeBlockCount());
+
+    MemoryPoolFree(Block1ptr);
+    printf("Number of free blocks left: %lu\r\n", MemoryPoolGetFreeBlockCount());
+
+    MemoryPoolFree(Block2ptr);
+    printf("Number of free blocks left: %lu\r\n", MemoryPoolGetFreeBlockCount());
 
     while (1)
     {
