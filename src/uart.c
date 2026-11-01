@@ -1,6 +1,10 @@
 #include "uart.h"
 #include "stm32g431xx.h"
 #include <stdint.h>
+#include <stdlib.h>
+#include <string.h>
+
+#include "memoryPool.h"
 #include "commands.h"
 
 /* variables for the ring buffer for the LinkedList menu */
@@ -124,6 +128,34 @@ int UartReadInt(void)
     return negative ? -value : value;
 }
 
+/* send messages through a memory pool */
+int UartSendMessage(const uint8_t *data, uint32_t length)
+{
+    if (length > MEMORY_BLOCK_SIZE)
+    {
+        /* error: message exceeds max buffer size */
+        return -1;
+    }
+
+    /* allocate memory block from the pool */
+    uint8_t *buffer = (uint8_t *)MemoryPoolAllocate();
+    if (buffer == NULL)
+    {
+        return -1; //no memory available
+    }
+    memcpy(buffer, data, length);
+
+    /* transmit each byte over UART */
+    for (uint32_t i = 0; i < length; ++i)
+    {
+        UartWrite(buffer[i]);
+    }
+
+    /* free the allocated memory block after transmission */
+    MemoryPoolFree(buffer);
+
+    return 0;
+}
 
 void USART2_IRQHandler(void)
 {

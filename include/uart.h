@@ -13,5 +13,6 @@ int _write(int fd, char *ptr, int len);
 int UartReadInt(void);
 int UartReadCharNonBlocking(uint8_t *ch);
 uint8_t UartReadRingBuffer(void);
+int UartSendMessage(const uint8_t *data, uint32_t length);
 
 #endif //UART_H

@@ -46,16 +46,12 @@ int main()
     printf("System Init...\r\n");
     MemoryPoolInit();
 
-    void *Block1ptr = MemoryPoolAllocate();
-    printf("Free blocks left: %lu\r\n", MemoryPoolGetFreeBlockCount());
-    void *Block2ptr = MemoryPoolAllocate();
-    printf("Free blocks left: %lu\r\n", MemoryPoolGetFreeBlockCount());
+    uint8_t msg1[] = "Hello from STM32!\r\n";
+    uint8_t msg2[] = "EmbeddedExpertIO MemPool\r\n";
 
-    MemoryPoolFree(Block1ptr);
-    printf("Number of free blocks left: %lu\r\n", MemoryPoolGetFreeBlockCount());
+    UartSendMessage(msg1, sizeof(msg1));
+    UartSendMessage(msg2, sizeof(msg2));
 
-    MemoryPoolFree(Block2ptr);
-    printf("Number of free blocks left: %lu\r\n", MemoryPoolGetFreeBlockCount());
 
     while (1)
     {
@@ -79,6 +75,6 @@ int main()
         //     printf("temp = %f\r\n", chipTemperature);
         // }
         //
-        // delay(1000);
+         delay(100);
     }
 }

@@ -5,7 +5,7 @@
 
 /* configuration parameters */
 #define MEMORY_POOL_SIZE  10   //number of memory blocks
-#define MEMORY_BLOCK_SIZE 32   //size of each memory block in bytes
+#define MEMORY_BLOCK_SIZE 64   //size of each memory block in bytes
 #define ALIGNMENT          4   //align memory blocks for 4-bytes boundaries
 
 /* memory pool data structure */
@@ -23,7 +23,7 @@ typedef struct
 
 void MemoryPoolInit(void);
 void *MemoryPoolAllocate(void);
-void MemoryPoolFree(void *block);
+void MemoryPoolFree(void *freedBlock);
 uint32_t MemoryPoolGetFreeBlockCount(void);
 
 #endif //MEMORY_POOL_H

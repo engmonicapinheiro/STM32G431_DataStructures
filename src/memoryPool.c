@@ -3,7 +3,8 @@
 
 static MemoryPool_t memPool;
 
-/* @brief Initialises the memory pool by linking all blocks
+/**
+ * @brief Initialises the memory pool by linking all blocks
  * into a free list
  */
 void MemoryPoolInit(void)
@@ -18,7 +19,8 @@ void MemoryPoolInit(void)
     ((MemBlock_t  *)memPool.pool[MEMORY_POOL_SIZE - 1])->next = NULL;  //end of list
 }
 
-/* @brief this function allocates a block of memory from the pool
+/**
+ * @brief this function allocates a block of memory from the pool
  * @retval pointer to the allocated block, or NULL if pool is exhausted
  */
 void *MemoryPoolAllocate(void)
@@ -33,21 +35,26 @@ void *MemoryPoolAllocate(void)
     return (void *)allocatedBlock;
 }
 
-/* @brief this function frees a previously allocated block, returning it to the pool
+/**
+ * @brief this function frees a previously allocated block, returning it to the pool
  * @param pointer to the block to be freed
  */
-void MemoryPoolFree(void *block)
+void MemoryPoolFree(void *freedBlock)
 {
-    if (block == NULL)
+    if (freedBlock == NULL)
     {
         return;
     }
 
-    MemBlock_t *tempBlock = (MemBlock_t *)block;
-    tempBlock->next = memPool.freeList;  //return the block to the free list
-    memPool.freeList = tempBlock;
+    MemBlock_t *block = (MemBlock_t *)freedBlock;
+    block->next = memPool.freeList;  //return the block to the free list
+    memPool.freeList = block;
 }
 
+/**
+ * @brief Retrieves the number of free memory blocks in the pool.
+ * @retval Number of available memory blocks
+ */
 uint32_t MemoryPoolGetFreeBlockCount(void)
 {
     uint32_t count = 0;
