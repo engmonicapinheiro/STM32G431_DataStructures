@@ -9,6 +9,8 @@
 #include "stackLinkedList.h"
 #include "queue.h"
 #include "memoryPool.h"
+#include "circularQueue.h"
+
 
 #define VREF_PLUS_MV 3300U
 
@@ -42,15 +44,8 @@ int main()
 
     //int option = 0;
 
-   // printf("Hello again from STM32G431xx...\n\r");
-    printf("System Init...\r\n");
-    MemoryPoolInit();
+    printf("Hello again from STM32G431xx...\n\r");
 
-    uint8_t msg1[] = "Hello from STM32!\r\n";
-    uint8_t msg2[] = "EmbeddedExpertIO MemPool\r\n";
-
-    UartSendMessage(msg1, sizeof(msg1));
-    UartSendMessage(msg2, sizeof(msg2));
 
 
     while (1)
@@ -75,6 +70,10 @@ int main()
         //     printf("temp = %f\r\n", chipTemperature);
         // }
         //
-         delay(100);
+
+        ProcessUartData();
+        ProcessCircularQueueCommands();
+       // CollectADCData();
+        delay(10);
     }
 }
