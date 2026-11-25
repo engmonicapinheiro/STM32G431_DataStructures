@@ -8,6 +8,7 @@ void LedInit(void);
 void LedOn(void);
 void LedOff(void);
 void ButtonInit(void);
+void LedToggle(void);
 bool GetButtonState(void);
 
 #endif //GPIO_H

@@ -6,10 +6,7 @@
 #include "gpio.h"
 #include "adc.h"
 #include "rtc.h"
-#include "stackLinkedList.h"
-#include "queue.h"
-#include "memoryPool.h"
-#include "circularQueue.h"
+#include "priorityQueueTaskExecutor.h"
 
 
 #define VREF_PLUS_MV 3300U
@@ -46,7 +43,13 @@ int main()
 
     printf("Hello again from STM32G431xx...\n\r");
 
+    /* add tasks to priority queue */
+    AddTask(TaskLedToggle, 1);
+   // AddTask(TaskReadAdc,2);
+    AddTask(TaskSendData, 2);
 
+    printf("Executing tasks...\r\n");
+    ExecuteTask();
 
     while (1)
     {
@@ -71,9 +74,9 @@ int main()
         // }
         //
 
-        ProcessUartData();
-        ProcessCircularQueueCommands();
+        //ProcessUartData();
+       // ProcessCircularQueueCommands();
        // CollectADCData();
-        delay(10);
+        delay(100);
     }
 }

@@ -22,6 +22,11 @@ void LedOff(void)
     GPIOB->ODR &= ~(GPIO_ODR_OD8);
 }
 
+void LedToggle(void)
+{
+    GPIOB->ODR ^= GPIO_ODR_OD8;
+}
+
 void ButtonInit(void)
 {
     /* enable clock access to PORTA */
